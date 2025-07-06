@@ -1,6 +1,6 @@
 """Trabajo individual Ae3 Felipe Burgos"""
 
-import random
+import random 
 
 # Elementos de la tienda
 Productos = {
@@ -20,9 +20,9 @@ Productos = {
 # Clientes frecuentes
 
 clientes_frecuentes = {
-    "12345678-9", 
-    "98765432-1", 
-    "11222333-4"
+    1: {"rut": "12345678-9", "nombre": "Juan Perez"},
+    2: {"rut": "98765432-1", "nombre": "Maria Lopez"},
+    3: {"rut": "11222333-4", "nombre": "Carlos Gomez"}
 }
 
 # Días de la semana
@@ -42,6 +42,7 @@ print("\n\nBienvenido a la tienda de ropa deportiva\n")
 random_dia = dias[random.randint(1, 7)] # random.randint(1, 7) genera un número aleatorio entre 1 y 7 inclusive y lo almacena en la variable random_dia
 
 print("Hoy es:", random_dia)
+
 if random_dia == "Lunes" or random_dia == "Martes":
     print("Hoy hay descuentos especiales, no te los pierdas!")
 else:
@@ -54,8 +55,11 @@ while True:
     variable_cliente_frecuente = input("¿Eres cliente frecuente? (si/no): ").strip().lower()
     if variable_cliente_frecuente == "si":
         ingreso_rut = input("Por favor, ingresa tu RUT: ").strip()
-        if ingreso_rut in clientes_frecuentes:
-            print("¡Bienvenido de nuevo, estimado!")
+        #verificar si el rut ingresado está en la base de datos de clientes frecuentes 
+        # clientes_frecuentes es un diccionario, por lo que se puede verificar si el rut está en los valores del diccionario
+        if any(cliente["rut"] == ingreso_rut for cliente in clientes_frecuentes.values()): # any() devuelve True si al menos un elemento del iterable es True
+            nombrecliente = next(cliente["nombre"] for cliente in clientes_frecuentes.values() if cliente["rut"] == ingreso_rut) # next() devuelve el primer elemento del iterable que cumple la condición 
+            print(f"¡Bienvenido de nuevo {nombrecliente} !")
             boleano_cliente_frecuente = True
             break
         else:
@@ -68,7 +72,7 @@ while True:
 
 # Mostrar los productos disponibles
 print ("\nProductos disponibles:\n")
-for tlp, (nombre, precio) in Productos.items(): #tlp todos los productos
+for tlp, (nombre, precio) in Productos.items(): #tlp todos los productos #
     print(f"{tlp}. {nombre} - ${precio}")
 
 # Solicitar al usuario que ingrese el ID del producto y la cantidad deseada
@@ -102,7 +106,7 @@ while True: # Bucle principal para agregar productos al carrito
     carrito[id_producto] = carrito.get(id_producto, 0) + cantidad
     print(f"\n{cantidad} unidad(es) de '{Productos[id_producto][0]}' agregada(s) al carrito.")
 
-    # Mostrar carrito actual
+    # Mostrar carrito actual 
     print('\nCarrito actual:')
     total_compra_bruto = 0 # Variable para almacenar el total de la compra antes de aplicar descuentos
     total_productos_en_carrito = 0 # Variable para almacenar el total de productos en el carrito
@@ -140,19 +144,19 @@ while True: # Bucle principal para agregar productos al carrito
     total_compra_final = total_compra_bruto - descuento_aplicado_monto # Calcular el total de la compra después del descuento
     
     #total sin descuento
-    print(f"\nTotal bruto: ${total_compra_bruto}") # Mostrar el total de la compra antes de aplicar descuentos
+    print(f"\n        Total bruto: ${total_compra_bruto}") # Mostrar el total de la compra antes de aplicar descuentos
     if descuento_aplicado_monto > 0: # Si se aplica algún descuento 
-        print("Descuentos por considerar:")
+        print("        Descuentos por considerar:")
         for desc in lista_descuentos: # Iterar sobre la lista de descuentos y mostrarlos
-            print(f"- {desc}") # Mostrar los descuentos aplicados
+            print(f"        - {desc}") # Mostrar los descuentos aplicados
+        print(f"        Porcentaje de descuento final: {n_descuento * 100:.0f}%") #:.0f formatea el número a 0 decimales
         if boleano_descuento_maximo == True:
-            print("de acuerdo a las políticas de la tienda, el descuento máximo es del 30%")
-        print(f"Porcentaje de descuento final: {n_descuento * 100:.0f}%") #:.0f formatea el número a 0 decimales
-        print(f"Monto de descuento aplicado: -${descuento_aplicado_monto}")
+            print("        de acuerdo a las políticas de la tienda, el descuento máximo es del 30%")
+        print(f"        Monto de descuento aplicado: -${descuento_aplicado_monto}")
     else:
-        print("No se aplicó descuento.")
+        print("        No se aplicó descuento.")
     
-    print(f"Total a pagar: ${total_compra_final}")
+    print(f"\n        Total a pagar: ${total_compra_final}")
     
     # Preguntar si desea agregar otro producto
     while True:
@@ -160,7 +164,7 @@ while True: # Bucle principal para agregar productos al carrito
         if respuesta == 'si': # Si la respuesta es sí, volver al inicio del bucle while para agregar otro producto
             break # Salir del bucle while para agregar otro producto
         elif respuesta == 'no': # Si la respuesta es no, salir del bucle while 
-            break # Salir del bucle while 
+            break 
         elif respuesta == '0': # Si la respuesta es 0, mostrar los productos disponibles
             print("\nProductos disponibles:\n")
             for tlp, (nombre, precio) in Productos.items():
@@ -175,11 +179,11 @@ while True: # Bucle principal para agregar productos al carrito
             precio_producto = Productos[carrito_actual_id][1]
             subtotal_producto = cantidad_en_carrito * precio_producto
             print(f"   - {cantidad_en_carrito} unidad(es) de '{nombre_producto}' - ${precio_producto} c/u = ${subtotal_producto:}")
-        print(f'\n    total bruto: ${total_compra_bruto}')
+        print(f'\n                         Total bruto: ${total_compra_bruto}')
         if descuento_aplicado_monto > 0:
-            print(f'    porcentaje de descuento aplicado: {n_descuento * 100:.0f}%')
-        print(f'    total final a pagar: ${total_compra_final}')
-        print ('\n\ndirigiéndote a la pantalla de pago...')
+            print(f'    Porcentaje de descuento aplicado: {n_descuento * 100:.0f}%')
+        print(f'                 Total final a pagar: ${total_compra_final}')
+        print ('\n\nDirigiéndote a la pantalla de pago...')
         print ("\nProcesando tu compra...")
         print ("\nGracias por tu compra, por favor espera un momento mientras procesamos tu pedido.")
         print ("\nProcesando tu pedido...")
